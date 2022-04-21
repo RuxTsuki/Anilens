@@ -1,0 +1,20 @@
+{
+    "name": "My awesome Chrome Extension",
+    "description": "Simple extension for test",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "permissions": ["storage", "activeTab", "scripting"],
+    "action": {
+        "default_popup": "index.html"
+    },
+    "content_scripts": [
+        {
+          "matches": ["https://*/", "https://*/*"],
+          "js": ["test-script.js"] 
+        }
+      ],
+    "web_accessible_resources": [{
+      "resources": ["assets/nested.cad3514e.js", "assets/jsx-runtime.72458d84.js"],
+      "matches": ["https://*/*"]
+    }]
+}

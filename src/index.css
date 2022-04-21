@@ -1,0 +1,81 @@
+:root {
+  /* general */
+  --white: #fff;
+  --spec-main-color: #9379eb;
+  --spec-main-color-deg: rgb(148, 122, 235, 0.54);
+  --spec-main-color-trans: rgb(147, 121, 235, 10%);
+  --spec-alert-color: #c00;
+  --spec-alert2-color: #e95022;
+  --spec-10-percent-layer: rgba(0, 0, 0, 0.1);
+
+  /* box shadows */
+  --spec-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
+  --spec-box-shadow-card: 0px 2px 15px 3px #00000020;
+  --spec-box-shadow-navbar: 0px 1px 12px 1px #0e0d0d82;
+
+  /* tags and lines */
+  --spec-tag-background: #434343;
+  --spec-line-color: #bbbbbb;
+  --spec-border-color: #707070;
+
+  /* disabled */
+  --spec-disabled-bg: #dcdcdc;
+  --spec-disabled-text: #a3a3a3;
+
+  /* inputs */
+  --spec-input-text-color: hsla(0, 0%, 0%, 0.87);
+  --spec-input-background: rgba(0, 0, 0, 0.04);
+}
+
+.dark {
+  --color-bg-primary: #2d3748;
+  --color-bg-secondary: #283141;
+  --color-text-primary: #f7fafc;
+  --color-text-secondary: #e2e8f0;
+  --color-text-accent: #81e6d9;
+}
+
+.light {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #edf2f7;
+  --color-text-primary: #2d3748;
+  --color-text-secondary: #4a5568;
+  --color-text-accent: #2b6cb0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: content-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a,
+a:visited,
+a:link,
+a:active,
+a:focus {
+  text-decoration: none;
+  color: initial;
+  outline: 0;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--spec-main-color);
+  border-radius: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #2d1950;
+}
