@@ -30,8 +30,18 @@ const createButton = () => {
 //chrome.runtime.onMessage.addListener(messagesFromReactAppListener);
 'use strict';
 
+const rootHinkku = document.createElement('div');
+rootHinkku.id = "root_hinkku";
+document.body.appendChild(rootHinkku);
+
+const linkStyles = document.createElement('link');
+linkStyles.rel = "stylesheet";
+linkStyles.type = "text/css";
+linkStyles.href = chrome.runtime.getURL("./assets/index.0182352c.css")
+
 const script = document.createElement('script');
 script.setAttribute("type", "module");
-script.setAttribute("src", chrome.runtime.getURL('./assets/nested.cad3514e.js'));
+script.setAttribute("src", chrome.runtime.getURL('./assets/index.8623281f.js'));
 const head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
+head.insertBefore(linkStyles, head.lastChild);
 head.insertBefore(script, head.lastChild);

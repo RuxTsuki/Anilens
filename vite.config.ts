@@ -7,10 +7,10 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      input: {
+      /* input: {
         main: "./index.html",
         nested: "./src/components/popup/Popup.tsx",
-      },
+      }, */
       /* output: {
         entryFileNames: chunkInfo => {
           return `${chunkInfo.name}.js`

@@ -9,12 +9,12 @@
     },
     "content_scripts": [
         {
-          "matches": ["https://*/", "https://*/*"],
+          "matches": ["https://animeflv"],
           "js": ["test-script.js"] 
         }
       ],
     "web_accessible_resources": [{
-      "resources": ["assets/nested.cad3514e.js", "assets/jsx-runtime.72458d84.js"],
-      "matches": ["https://*/*"]
+      "resources": ["assets/index.8623281f.js", "assets/index.0182352c.css"],
+      "matches": ["https://animeflv"]
     }]
 }
