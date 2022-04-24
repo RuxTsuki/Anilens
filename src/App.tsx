@@ -3,67 +3,62 @@ import "./App.css";
 import { useModal } from "./hooks/useModal";
 import { MouseEvent, useState } from "react";
 import { Modal } from "./components/modal/Modal";
-import { renderToStaticMarkup, renderToString } from "react-dom/server";
 
-export async function opene(func: Function) {
+export async function testCommunicationChrome(initPopup: boolean) {
   const [tab] = await chrome.tabs.query({
     active: true,
     currentWindow: true,
   });
 
+  console.log(tab);
+
   if (!tab.id) return;
 
-  //chrome.tabs.sendMessage(tab.id, {greeting: true}, (e) => {console.log(e)})
+  chrome.tabs.sendMessage(
+    tab.id,
+    {
+      greeting: "A Message from [Context] Extension to Open Popup",
+      initPopup,
+    },
+    function ({ response }) {
+      console.log(response);
+    }
+  );
 
-/*   chrome.scripting.executeScript(
+  /*   chrome.scripting.executeScript(
     {
       target: { tabId: tab.id },
       func: funcToBeExecutedOnWebTarget,
-      args: [{ htmlButton: <Button /> }],
+      args: ["Msg arguments from Extension"],
     },
     (injectionResults: any) => {
       console.log(injectionResults);
       for (const frameResult of injectionResults)
-        console.log(
-          "Frame Title: " + frameResult.result,
-          JSON.stringify(frameResult.result)
-        );
+        console.log("Frame Title: " + frameResult.result);
     }
   ); */
 }
 
-export function funcToBeExecutedOnWebTarget(testHtmlButton?: any) {
+export function funcToBeExecutedOnWebTarget(testHtmlButton: string) {
   const contextExtensionBody = document.body;
 
-  console.log("context tab", contextExtensionBody);
-  console.log("context tab", testHtmlButton);
-
-  const divFather = document.createElement("div");
-  divFather.innerHTML = testHtmlButton.htmlButton;
-  contextExtensionBody.appendChild(divFather);
+  console.log(
+    "%cHello from [Context] Tab: ",
+    "color: #F7DBF0; font-size:1.2rem;",
+    contextExtensionBody,
+    testHtmlButton
+  );
 
   return {
     boyd: "haha",
   };
 }
 
-function Button() {
-  const handleHelloWorld = () => {
-    console.log("Hola mundo");
-  };
-
-  return (
-    <>
-      <button onClick={handleHelloWorld}>HOLA MUNDO</button>
-    </>
-  );
-}
-
 function App() {
-  const [enable, setEnable] = useState(false);
-
   const [modalStatus1, positionAnimation1, , openModal1, closeModal1] =
     useModal(false);
+
+  const [initPopup, setInitPopup] = useState(false);
 
   const handleOpenModal = (
     event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>
@@ -76,8 +71,14 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
 
-        <button type="button" onClick={(ev: any) => opene(openModal1)}>
-          test
+        <button
+          type="button"
+          onClick={(ev: any) => {
+            setInitPopup(!initPopup);
+            testCommunicationChrome(!initPopup);
+          }}
+        >
+          {initPopup ? "Popup active" : "Popup hidden"}
         </button>
 
         <button type="button" onClick={handleOpenModal}>

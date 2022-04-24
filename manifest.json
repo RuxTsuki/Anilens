@@ -1,20 +1,34 @@
 {
-    "name": "My awesome Chrome Extension",
-    "description": "Simple extension for test",
-    "version": "1.0.0",
-    "manifest_version": 3,
-    "permissions": ["storage", "activeTab", "scripting"],
-    "action": {
-        "default_popup": "index.html"
-    },
-    "content_scripts": [
-        {
-          "matches": ["https://animeflv"],
-          "js": ["test-script.js"] 
-        }
+  "name": "My awesome Chrome Extension",
+  "description": "Simple extension for test",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.animeflv.net/*"
       ],
-    "web_accessible_resources": [{
-      "resources": ["assets/index.8623281f.js", "assets/index.0182352c.css"],
-      "matches": ["https://animeflv"]
-    }]
+      "js": [
+        "./contentScripts/index.global.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "/contentScripts/style.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
 }

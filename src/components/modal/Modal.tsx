@@ -7,6 +7,7 @@ import { useDrag } from "./hooks/useDrag";
 
 export interface PropsModal {
   isOpen: boolean;
+  containerWhereRender?: HTMLElement;
   onClose?: () => void;
   closeByIcon?: boolean;
   closeByClickOutside?: boolean;
@@ -32,6 +33,7 @@ export interface PropsModal {
 export const Modal = memo(
   ({
     isOpen,
+    containerWhereRender = document.body,
     children,
     onClose,
     draggable = true,
@@ -140,7 +142,7 @@ export const Modal = memo(
           </div>
         )}
       </>,
-      document.querySelector("body") as HTMLBodyElement
+      containerWhereRender
     );
   }
 );
