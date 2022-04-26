@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useRef } from "react";
 import { useModal } from "../../hooks/useModal";
-import { Modal } from "../modal/Modal";
+import { Modal } from "../../UI/molecules/modal/Modal";
 import "./popup.css";
 
 function App() {

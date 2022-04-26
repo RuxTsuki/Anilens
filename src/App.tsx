@@ -1,8 +1,9 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useModal } from "./hooks/useModal";
-import { MouseEvent, useState } from "react";
-import { Modal } from "./components/modal/Modal";
+import { MouseEvent, useEffect, useState } from "react";
+import { Modal } from "./UI/molecules/modal/Modal";
+import AiPlay from "./UI/atoms/icons/AiPlay";
 
 export async function testCommunicationChrome(initPopup: boolean) {
   const [tab] = await chrome.tabs.query({
@@ -20,7 +21,7 @@ export async function testCommunicationChrome(initPopup: boolean) {
       greeting: "A Message from [Context] Extension to Open Popup",
       initPopup,
     },
-    function ({ response }) {
+    function (response) {
       console.log(response);
     }
   );
@@ -66,18 +67,29 @@ function App() {
     openModal1({ event });
   };
 
+  useEffect(() => {
+    console.log("mounted");
+
+    return () => {
+      console.log("unmounted");
+    };
+  }, []);
+
+  const handlePopupInExtension = () => {
+    setInitPopup((initPopup) => {
+      testCommunicationChrome(!initPopup);
+      return !initPopup;
+    });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <div className="container__play">
+          <AiPlay fontSize={"3.8rem"} color={"#fff"} />
+        </div>
 
-        <button
-          type="button"
-          onClick={(ev: any) => {
-            setInitPopup(!initPopup);
-            testCommunicationChrome(!initPopup);
-          }}
-        >
+        <button type="button" onClick={handlePopupInExtension}>
           {initPopup ? "Popup active" : "Popup hidden"}
         </button>
 
