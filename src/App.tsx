@@ -5,7 +5,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import { Modal } from "./UI/molecules/modal/Modal";
 import AiPlay from "./UI/atoms/icons/AiPlay";
 
-export async function testCommunicationChrome(initPopup: boolean) {
+export async function testCommunicationChrome() {
   const [tab] = await chrome.tabs.query({
     active: true,
     currentWindow: true,
@@ -18,8 +18,8 @@ export async function testCommunicationChrome(initPopup: boolean) {
   chrome.tabs.sendMessage(
     tab.id,
     {
-      greeting: "A Message from [Context] Extension to Open Popup",
-      initPopup,
+      extensionOpen: true,
+      data: {},
     },
     function (response) {
       console.log(response);
@@ -61,23 +61,70 @@ function App() {
 
   const [initPopup, setInitPopup] = useState(false);
 
+  const [portConnection, setPortConnection] =
+    useState<chrome.runtime.Port | null>(null);
+
   const handleOpenModal = (
     event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>
   ) => {
     openModal1({ event });
   };
 
-  useEffect(() => {
-    console.log("mounted");
+  const handleExtensionListener = (port: chrome.runtime.Port) => {
+    console.log(port, "extension");
+    console.assert(port.name === "hinkkuCon");
+    setPortConnection(port);
+  };
 
+  const handlePortMessageListener = (msg: any) => {
+    if (!portConnection) return;
+
+    console.log(msg);
+    if (msg.joke === "Knock knock")
+      portConnection.postMessage({ question: "Who's there?" });
+  };
+  // pendiente tambien el typado para los mensajes
+  //  pendiente
+  const initChrome = async () => {
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+
+    if (!tab.id) return;
+
+    var port = chrome.tabs.connect(tab.id, { name: "hinkkuCon" });
+    port.postMessage({ joke: "Knock knock" });
+    port.onMessage.addListener(function (msg) {
+      console.log(msg, " from extension");
+      /* if (msg.question === "Who's there?")
+        port.postMessage({ answer: "Madame" });
+      else if (msg.question === "Madame who?")
+        port.postMessage({ answer: "Madame... Bovary" }); */
+    });
+  };
+
+  // init request & listener for content scripts
+  useEffect(() => {
+    //initChrome();
+    testCommunicationChrome();
+    chrome?.runtime?.onConnect?.addListener(handleExtensionListener);
     return () => {
-      console.log("unmounted");
+      chrome?.runtime?.onConnect?.removeListener(handleExtensionListener);
     };
   }, []);
 
+  // portConnection.onMessage Listener
+  useEffect(() => {
+    portConnection?.onMessage?.addListener(handlePortMessageListener);
+    return () => {
+      portConnection?.onMessage?.removeListener(handlePortMessageListener);
+    };
+  }, [portConnection]);
+
   const handlePopupInExtension = () => {
     setInitPopup((initPopup) => {
-      testCommunicationChrome(!initPopup);
+      testCommunicationChrome();
       return !initPopup;
     });
   };

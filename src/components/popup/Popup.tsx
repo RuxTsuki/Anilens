@@ -14,15 +14,11 @@ function App() {
     sender: any,
     sendResponse: any
   ) => {
-    console.log(
-      "%cHello From [Context] Web React ShadowTree",
-      "color:#CDF0EA; font-size:1.2rem;",
-      msg
-    );
-
-    msg.initPopup ? openModal1() : closeModal1();
-
-    sendResponse({ response: "rayos" });
+    if (msg.extensionOpen) {
+      const port = chrome.runtime.connect({ name: "hinkkuCon" });
+      port.postMessage({ joke: "Knock knock" });
+    }
+    sendResponse({ response: document.URL });
   };
 
   const handleOpenModal = (
@@ -37,6 +33,12 @@ function App() {
       "color:#CDF0EA; font-size:1.2rem;"
     );
     chrome.runtime.onMessage.addListener(messagesFromReactAppListener);
+    /* =================================== */
+    /*   port.postMessage({ joke: "Knock knock" });
+    port.onMessage.addListener((msg) => {
+      console.log(msg);
+      port.postMessage({ answer: "Madame" });
+    }); */
 
     return () => {
       chrome.runtime.onMessage.removeListener(messagesFromReactAppListener);
