@@ -1,6 +1,9 @@
 :root {
   /* general */
   --white: #fff;
+  --color-bg-primary: #010409;
+
+
   --spec-main-color: #9379eb;
   --spec-main-color-deg: rgb(148, 122, 235, 0.54);
   --spec-main-color-trans: rgb(147, 121, 235, 10%);
@@ -28,7 +31,7 @@
 }
 
 .dark {
-  --color-bg-primary: #2d3748;
+  --color-bg-primary: #010409;
   --color-bg-secondary: #283141;
   --color-text-primary: #f7fafc;
   --color-text-secondary: #e2e8f0;

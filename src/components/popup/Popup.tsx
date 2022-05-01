@@ -1,30 +1,46 @@
-import { MouseEvent, useEffect, useRef } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../../UI/molecules/modal/Modal";
 import "./popup.css";
-
 function App() {
   const refRoot = useRef<HTMLDivElement>(null);
 
   const [modalStatus1, positionAnimation1, , openModal1, closeModal1] =
     useModal(false);
+  const [portConnection, setPortConnection] =
+    useState<chrome.runtime.Port | null>(null);
+
+  const [episode, setEpisode] = useState<episodeServer | null>(null);
 
   const messagesFromReactAppListener = (
     msg: any,
     sender: any,
     sendResponse: any
   ) => {
+    console.log(msg);
     if (msg.extensionOpen) {
       const port = chrome.runtime.connect({ name: "hinkkuCon" });
-      port.postMessage({ joke: "Knock knock" });
+      setPortConnection(port);
+      // portConnection?.postMessage({ joke: "Knock knock" });
     }
-    sendResponse({ response: document.URL });
+    //sendResponse({ response: document.URL });
   };
 
   const handleOpenModal = (
-    event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+    event?: MouseEvent<HTMLButtonElement | HTMLAnchorElement>
   ) => {
     openModal1({ event });
+  };
+
+  const handlePortMessageListener = (msg: any) => {
+    if (!portConnection) return;
+
+    if (msg.episodeServer) {
+      setEpisode(msg.episodeServer);
+      handleOpenModal();
+    }
+
+    console.log(msg);
   };
 
   useEffect(() => {
@@ -45,9 +61,17 @@ function App() {
     };
   }, []);
 
+  // portConnection.onMessage Listener
+  useEffect(() => {
+    portConnection?.onMessage?.addListener(handlePortMessageListener);
+    return () => {
+      portConnection?.onMessage?.removeListener(handlePortMessageListener);
+    };
+  }, [portConnection]);
+
   return (
     <div className="aaaaa" ref={refRoot}>
-      <button onClick={handleOpenModal}>Open Modal</button>
+      {/* <button onClick={handleOpenModal}>Open Modal</button> */}
 
       <Modal
         isOpen={modalStatus1}
@@ -60,9 +84,15 @@ function App() {
         <div className="hola">
           <h1 className="text-3xl text-main">Probando</h1>
           <button onClick={closeModal1}>Cerrar</button>
+          {episode && <iframe src={episode.iframe} frameBorder="0"></iframe>}
         </div>
       </Modal>
     </div>
   );
 }
 export default App;
+
+export type episodeServer = {
+  iframe: string;
+  name: string;
+};

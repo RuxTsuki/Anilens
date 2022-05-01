@@ -4,6 +4,19 @@ import { useModal } from "./hooks/useModal";
 import { MouseEvent, useEffect, useState } from "react";
 import { Modal } from "./UI/molecules/modal/Modal";
 import AiPlay from "./UI/atoms/icons/AiPlay";
+import MainLayout from "./layouts/MainLayout";
+import ReactLoading from "react-loading";
+
+/* 
+
+cosas que necesito separar
+
+funcion de enviar mensaje al content script
+
+*/
+export const urlbase1 = "http://127.0.0.1:5000/animeflv/server?url=";
+
+export const urlbase = "http://127.0.0.1:5000/animeflv/episode?total=20&url=";
 
 export async function testCommunicationChrome() {
   const [tab] = await chrome.tabs.query({
@@ -11,7 +24,7 @@ export async function testCommunicationChrome() {
     currentWindow: true,
   });
 
-  console.log(tab);
+  //console.log(tab);
 
   if (!tab.id) return;
 
@@ -26,33 +39,7 @@ export async function testCommunicationChrome() {
     }
   );
 
-  /*   chrome.scripting.executeScript(
-    {
-      target: { tabId: tab.id },
-      func: funcToBeExecutedOnWebTarget,
-      args: ["Msg arguments from Extension"],
-    },
-    (injectionResults: any) => {
-      console.log(injectionResults);
-      for (const frameResult of injectionResults)
-        console.log("Frame Title: " + frameResult.result);
-    }
-  ); */
-}
-
-export function funcToBeExecutedOnWebTarget(testHtmlButton: string) {
-  const contextExtensionBody = document.body;
-
-  console.log(
-    "%cHello from [Context] Tab: ",
-    "color: #F7DBF0; font-size:1.2rem;",
-    contextExtensionBody,
-    testHtmlButton
-  );
-
-  return {
-    boyd: "haha",
-  };
+  return tab;
 }
 
 function App() {
@@ -60,6 +47,18 @@ function App() {
     useModal(false);
 
   const [initPopup, setInitPopup] = useState(false);
+
+  const [episodes, setEpisodes] = useState<episode[]>([]);
+  const [loadingGetEpisodes, setloadingGetEpisodes] = useState(false);
+
+  const [episode, setEpisode] = useState<episode | null>(null);
+
+  const [servers, setServers] = useState<episodeServer[]>([]);
+  const [loadingGetServers, setloadingGetServers] = useState(false);
+
+  const [episodeServer, setEpisodeServer] = useState<episodeServer | null>(
+    null
+  );
 
   const [portConnection, setPortConnection] =
     useState<chrome.runtime.Port | null>(null);
@@ -71,8 +70,6 @@ function App() {
   };
 
   const handleExtensionListener = (port: chrome.runtime.Port) => {
-    console.log(port, "extension");
-    console.assert(port.name === "hinkkuCon");
     setPortConnection(port);
   };
 
@@ -83,8 +80,7 @@ function App() {
     if (msg.joke === "Knock knock")
       portConnection.postMessage({ question: "Who's there?" });
   };
-  // pendiente tambien el typado para los mensajes
-  //  pendiente
+
   const initChrome = async () => {
     const [tab] = await chrome.tabs.query({
       active: true,
@@ -106,13 +102,31 @@ function App() {
 
   // init request & listener for content scripts
   useEffect(() => {
+    async function getTab() {
+      const tab = await testCommunicationChrome();
+      console.log(tab);
+      setloadingGetEpisodes(true);
+      if (tab && tab.url) {
+        fetch(`${urlbase}${tab.url}`)
+          .then((resp) => resp.json())
+          .then((resp: listEpisodes) => setEpisodes(resp.episodes))
+          .finally(() => setloadingGetEpisodes(false));
+      }
+    }
+
+    getTab();
+
     //initChrome();
-    testCommunicationChrome();
+    // connection long
     chrome?.runtime?.onConnect?.addListener(handleExtensionListener);
+
     return () => {
+      //portConnection?.postMessage({ question: "byebye" });
       chrome?.runtime?.onConnect?.removeListener(handleExtensionListener);
     };
   }, []);
+
+  // useEffect
 
   // portConnection.onMessage Listener
   useEffect(() => {
@@ -129,21 +143,76 @@ function App() {
     });
   };
 
+  const handleEpisode = (episode: episode) => {
+    if (portConnection) {
+      setEpisode(episode);
+      // portConnection.postMessage({ episode });
+    }
+  };
+  // get servers
+
+  const handleServer = (server: episodeServer) => {
+    setEpisodeServer(server);
+  };
+
+  useEffect(() => {
+    const getEpisode = async () => {
+      setloadingGetServers(true);
+      const resp = await fetch(`${urlbase1}${episode?.url}`)
+        .then((resp) => resp.json())
+        .then((resp: getEpisode) => setServers(resp.server))
+        .finally(() => setloadingGetServers(false));
+    };
+
+    episode && getEpisode();
+  }, [episode]);
+
+  useEffect(() => {
+    if (episodeServer) {
+      portConnection?.postMessage({ episodeServer });
+    }
+  }, [episodeServer]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <div className="container__play">
-          <AiPlay fontSize={"3.8rem"} color={"#fff"} />
-        </div>
+      <MainLayout />
 
-        <button type="button" onClick={handlePopupInExtension}>
-          {initPopup ? "Popup active" : "Popup hidden"}
-        </button>
+      <ul className="ul">
+        {loadingGetEpisodes ? (
+          <div className="center">
+            <ReactLoading type={"spinningBubbles"} color={"#fff"} />
+          </div>
+        ) : (
+          episodes.map((episode) => (
+            <li className="li" key={episode.url}>
+              <div className="contianer-img">
+                <img src={episode.img} alt="" />
+                <div
+                  onClick={() => handleEpisode(episode)}
+                  className="container__play"
+                >
+                  <AiPlay fontSize={"3.8rem"} color={"#000"} />
+                </div>
+              </div>
+              <h3>{episode.episode || episode.premiere_date}</h3>
+            </li>
+          ))
+        )}
+      </ul>
 
-        <button type="button" onClick={handleOpenModal}>
-          {modalStatus1 ? "opened" : "closed"}
-        </button>
-      </header>
+      <ul className="ul">
+        {loadingGetServers ? (
+          <div className="center">
+            <ReactLoading type={"spinningBubbles"} color={"#fff"} />
+          </div>
+        ) : (
+          servers.map((server) => (
+            <li className="li" key={server.name}>
+              <h3 onClick={() => handleServer(server)}>{server.name}</h3>
+            </li>
+          ))
+        )}
+      </ul>
 
       <Modal
         isOpen={modalStatus1}
@@ -162,3 +231,26 @@ function App() {
 }
 
 export default App;
+
+export type listEpisodes = {
+  episodes: episode[];
+  total: number;
+};
+
+export type episode = {
+  img: string;
+  premiere_date?: string;
+  title: string;
+  url: string;
+  episode?: string;
+};
+
+export type getEpisode = {
+  server: episodeServer[];
+  url: string;
+};
+
+export type episodeServer = {
+  iframe: string;
+  name: string;
+};

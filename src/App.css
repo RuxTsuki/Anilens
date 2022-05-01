@@ -3,6 +3,7 @@
   text-align: center;
   width: 780px;
   height: 560px;
+  overflow: auto;
 }
 
 button {
@@ -10,9 +11,45 @@ button {
 }
 
 /*  css to refactor  */
-.container__play {
-  height: 300px;
+
+.ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.li {
+  display: flex;
+}
+
+.contianer-img {
+  width: 140px;
+  height: 65px;
+  position: relative;
+}
+
+.contianer-img img {
+  max-width: 100%;
+  object-fit: contain;
   width: 100%;
+}
+
+.container__play {
   display: grid;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   place-items: center;
+}
+
+.li h3 {
+  font-size: 1.4rem;
+  color: aliceblue;
+}
+
+.center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
