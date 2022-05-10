@@ -53,3 +53,11 @@ button {
   display: flex;
   justify-content: center;
 }
+
+.hola {
+  width: 500px;
+  height: 500px;
+}
+.hola h1 {
+  margin: 0;
+}

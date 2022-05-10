@@ -177,6 +177,8 @@ function App() {
     <div className="App">
       <MainLayout />
 
+      {/*  <button onClick={handleOpenModal}>Open</button> */}
+
       <ul className="ul">
         {loadingGetEpisodes ? (
           <div className="center">
@@ -216,10 +218,9 @@ function App() {
 
       <Modal
         isOpen={modalStatus1}
-        posAnimationWrapper={positionAnimation1}
         onClose={closeModal1}
+        typeSize={"custom"}
         closeByIcon={true}
-        closeByClickOutside={true}
       >
         <div className="hola">
           <h1 className="text-3xl text-main">Probando</h1>
