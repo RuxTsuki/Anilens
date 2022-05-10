@@ -79,7 +79,6 @@ function App() {
         posAnimationWrapper={positionAnimation1}
         onClose={closeModal1}
         closeByIcon={true}
-        closeByClickOutside={true}
       >
         <div className="hola">
           <h1 className="text-3xl text-main">Probando</h1>

@@ -1,17 +1,22 @@
 interface Props {
   fill?: string;
   className?: string;
+  height?: string;
 }
 
-export const CloseIconSvg = ({ fill = "", className = "" }: Props) => {
+export const CloseIconSvg = ({
+  fill = "",
+  className = "",
+  height = "1rem",
+}: Props) => {
   return (
     <svg
       className={className}
       stroke="currentColor"
       strokeWidth="0"
       viewBox="0 0 24 24"
-      height="1em"
-      width="1em"
+      height={height}
+      width="100%"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

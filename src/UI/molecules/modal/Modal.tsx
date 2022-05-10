@@ -6,54 +6,49 @@ import { WrapperAnimation } from "./WrapperAnimation";
 import { useDrag } from "./hooks/useDrag";
 
 export interface PropsModal {
-  isOpen: boolean;
-  containerWhereRender?: HTMLElement;
-  onClose?: () => void;
-  closeByIcon?: boolean;
-  closeByClickOutside?: boolean;
-  children?: any;
-  draggable?: boolean;
-  titleColorClass?: string;
-  bgColorClass?: string;
-  modalAnimationClass?: string;
-  position?: "centered" | "custom";
-  typeSize?: "default" | "custom";
-  animationWrapper?: boolean;
   animationBgColor?: string;
-  topModal?: number;
-  leftModal?: number;
-  posAnimationWrapper?: { top: number; left: number };
-  header?: boolean;
-  title?: string;
-  titleIconElement?: any;
+  animationWrapper?: boolean;
+  bgColorClass?: string;
+  children?: any;
+  closeByClickOutside?: boolean;
+  closeByIcon?: boolean;
+  containerWhereRender?: HTMLElement;
+  draggable?: boolean;
   id?: string;
+  isOpen: boolean;
+  leftModal?: number;
+  modalAnimationClass?: string;
   modalCustomClass?: string;
+  /**
+   * Required if prop `closeByIcon` or `closeByClickOutside` is true
+   */
+  onClose?: () => void;
+  posAnimationWrapper?: { top: number; left: number };
+  position?: "centered" | "custom";
+  topModal?: number;
+  typeSize?: "default" | "custom";
 }
 
 export const Modal = memo(
   ({
-    isOpen,
-    containerWhereRender = document.body,
-    children,
-    onClose,
-    draggable = true,
-    closeByIcon = false,
-    closeByClickOutside = false,
     animationBgColor = "rgba(18, 21, 25, 0.5)",
-    titleColorClass = "",
-    bgColorClass = "modal__bg-color",
     animationWrapper = true,
-    modalAnimationClass = "",
-    position = "centered",
-    typeSize = "default",
-    topModal = 0,
-    leftModal = 0,
-    posAnimationWrapper = { top: 0, left: 0 },
-    header = true,
-    title = "",
-    titleIconElement,
+    bgColorClass = "modal__bg-color",
+    children,
+    closeByClickOutside = false,
+    closeByIcon = false,
+    containerWhereRender = document.body,
+    draggable = true,
     id = "",
+    isOpen,
+    leftModal = 0,
+    modalAnimationClass = "",
     modalCustomClass = "",
+    onClose,
+    posAnimationWrapper = { top: 0, left: 0 },
+    position = "centered",
+    topModal = 0,
+    typeSize = "default",
   }: PropsModal) => {
     const { measuredRef, measuredRefTrigger } = useDrag();
 
@@ -76,11 +71,6 @@ export const Modal = memo(
       onClose && closeByClickOutside && onClose();
     };
 
-    const gridLayoutHeader =
-      header && (title || titleIconElement)
-        ? `modal__container-grid-layout`
-        : "";
-
     const handleClosePropagation = (ev: MouseEvent<HTMLDivElement>) => {
       ev.stopPropagation();
     };
@@ -98,14 +88,13 @@ export const Modal = memo(
             >
               <div
                 className={`
-              ${bgColorClass}
-              ${gridLayoutHeader}
-              ${modalAnimationClass}
-              ${position === "centered" && "modal__place-self-center"}
-              ${
-                typeSize === "default" && "modal__layout-default-sizes"
-              }              
-            `}
+                  ${bgColorClass}
+                  ${modalAnimationClass}
+                  ${position === "centered" && "modal__place-self-center"}
+                  ${
+                    typeSize === "default" && "modal__layout-default-sizes"
+                  }              
+                `}
                 ref={measuredRef}
                 style={position === "custom" ? positionModal : {}}
                 onClick={handleClosePropagation}
@@ -115,7 +104,7 @@ export const Modal = memo(
                     className="modal__close-btn"
                     onClick={handleCloseModal}
                   >
-                    <CloseIconSvg />
+                    <CloseIconSvg height="1.125rem" />
                   </button>
                 )}
 
@@ -124,16 +113,6 @@ export const Modal = memo(
                     ref={measuredRefTrigger}
                     className="modal__header-dragger"
                   ></div>
-                )}
-
-                {header && (
-                  <div className="modal__header">
-                    <h3 className={`modal__header-title ${titleColorClass}`}>
-                      {title}
-                    </h3>
-
-                    <div className="modal__header-icon">{titleIconElement}</div>
-                  </div>
                 )}
 
                 {children}
