@@ -177,7 +177,7 @@ function App() {
     <div className="App">
       <MainLayout />
 
-      {/*  <button onClick={handleOpenModal}>Open</button> */}
+      <button onClick={handleOpenModal}>Open</button>
 
       <ul className="ul">
         {loadingGetEpisodes ? (
@@ -222,9 +222,13 @@ function App() {
         typeSize={"custom"}
         closeByIcon={true}
       >
-        <div className="hola">
-          <h1 className="text-3xl text-main">Probando</h1>
-          <button onClick={closeModal1}>Cerrar</button>
+        <div className="cont">
+          <div className="hola">
+            <iframe
+              src="https://ok.ru/videoembed/3403197123268"
+              frameBorder={"0"}
+            ></iframe>
+          </div>
         </div>
       </Modal>
     </div>

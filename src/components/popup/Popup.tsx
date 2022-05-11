@@ -77,13 +77,14 @@ function App() {
         isOpen={modalStatus1}
         containerWhereRender={refRoot.current?.parentElement!}
         posAnimationWrapper={positionAnimation1}
+        typeSize={"custom"}
         onClose={closeModal1}
         closeByIcon={true}
       >
-        <div className="hola">
-          <h1 className="text-3xl text-main">Probando</h1>
-          <button onClick={closeModal1}>Cerrar</button>
-          {episode && <iframe src={episode.iframe} frameBorder="0"></iframe>}
+        <div className="modal__container-iframe">
+          <div className="modal__iframe">
+            {episode && <iframe src={episode.iframe} frameBorder="0"></iframe>}
+          </div>
         </div>
       </Modal>
     </div>

@@ -54,10 +54,24 @@ button {
   justify-content: center;
 }
 
-.hola {
-  width: 500px;
-  height: 500px;
+.cont {
+  max-width: 1400px;
+  width: 90vw;
+  height: 100%;
+  position: relative;
 }
-.hola h1 {
-  margin: 0;
+
+.hola {
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+  width: 100%;
+}
+
+.hola iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
