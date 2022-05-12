@@ -1,8 +1,8 @@
 .App {
   background-color: #282c34;
   text-align: center;
-  width: 780px;
-  height: 560px;
+  width: 790px;
+  height: 580px;
   overflow: auto;
 }
 
@@ -12,36 +12,9 @@ button {
 
 /*  css to refactor  */
 
-.ul {
-  display: flex;
-  flex-direction: column;
-}
 
-.li {
-  display: flex;
-}
 
-.contianer-img {
-  width: 140px;
-  height: 65px;
-  position: relative;
-}
 
-.contianer-img img {
-  max-width: 100%;
-  object-fit: contain;
-  width: 100%;
-}
-
-.container__play {
-  display: grid;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  place-items: center;
-}
 
 .li h3 {
   font-size: 1.4rem;
@@ -53,6 +26,8 @@ button {
   display: flex;
   justify-content: center;
 }
+
+/* iframe */
 
 .cont {
   max-width: 1400px;

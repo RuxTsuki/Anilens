@@ -3,7 +3,6 @@
   --white: #fff;
   --color-bg-primary: #010409;
 
-
   --spec-main-color: #9379eb;
   --spec-main-color-deg: rgb(148, 122, 235, 0.54);
   --spec-main-color-trans: rgb(147, 121, 235, 10%);
@@ -49,7 +48,7 @@
 *,
 *::before,
 *::after {
-  box-sizing: content-box;
+  box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -60,6 +59,16 @@ body {
 ul,
 li {
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
 }
 
 a,

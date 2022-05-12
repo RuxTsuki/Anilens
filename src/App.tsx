@@ -177,9 +177,9 @@ function App() {
     <div className="App">
       <MainLayout />
 
-      <button onClick={handleOpenModal}>Open</button>
+     {/*  <button onClick={handleOpenModal}>Open</button> */}
 
-      <ul className="ul">
+{/*       <ul className="ul">
         {loadingGetEpisodes ? (
           <div className="center">
             <ReactLoading type={"spinningBubbles"} color={"#fff"} />
@@ -215,7 +215,7 @@ function App() {
           ))
         )}
       </ul>
-
+ */}
       <Modal
         isOpen={modalStatus1}
         onClose={closeModal1}

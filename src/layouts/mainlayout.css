@@ -1,0 +1,72 @@
+.main-layout {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 54px calc(100% - 124px) 70px;
+}
+
+.main .media__section {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 25px;
+  gap: 15px;
+}
+
+.episode__selected img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Lista izquierda */
+.list__episodes {
+  height: 100%;
+  overflow: auto;
+}
+
+.list__episodes ul {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.center {
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.list__episodes li {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+}
+
+.contianer-img {
+  width: 120px;
+  height: 60px;
+  position: relative;
+}
+
+.contianer-img img {
+  max-width: 100%;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.container__play {
+  display: grid;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.list__episodes li h3 {
+  padding-left: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
